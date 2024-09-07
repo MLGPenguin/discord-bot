@@ -21,6 +21,10 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     implementation("com.github.mlgpenguin:MathEvaluator:2.1.1")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+
+    // Commands
+    implementation("io.github.revxrsal:lamp.common:4.0.0-beta.2")
+    implementation("io.github.revxrsal:lamp.jda:4.0.0-beta.2")
 }
 
 application {
@@ -31,6 +35,10 @@ kotlin {
     compilerOptions {
         apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
     }
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 tasks {

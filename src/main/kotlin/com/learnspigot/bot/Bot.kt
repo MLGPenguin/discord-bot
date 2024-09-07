@@ -4,17 +4,18 @@ import com.learnspigot.bot.counting.CountingCommand
 import com.learnspigot.bot.help.PasteCommand
 import com.learnspigot.bot.reputation.LeaderboardMessage
 import com.learnspigot.bot.verification.VerificationMessage
-import dev.minn.jda.ktx.interactions.commands.option
 import dev.minn.jda.ktx.interactions.commands.slash
 import dev.minn.jda.ktx.interactions.commands.updateCommands
 import dev.minn.jda.ktx.jdabuilder.intents
 import dev.minn.jda.ktx.jdabuilder.light
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Activity
-import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
+import revxrsal.commands.jda.JDALamp
+import revxrsal.commands.jda.JDAVisitors.slashCommands
+import revxrsal.commands.jda.actor.SlashCommandActor
 
 object Bot {
     var jda: JDA = light(Environment.BOT_TOKEN) {
@@ -31,25 +32,30 @@ object Bot {
         )
     }
 
+    val lamp = JDALamp.builder<SlashCommandActor>().build()
+
     init {
         jda.awaitReady()
 
         Server // intentional to initialize vals
+
+        // Register all commands here
+        lamp.register(CountingCommand())
+
+        lamp.accept(slashCommands(jda))
 
         VerificationMessage()
         LeaderboardMessage()
 
         // Init Commands
         PasteCommand
-        CountingCommand
-
 
         Server.guild.updateCommands {
             slash("pastebin", "Share the link to the custom pastebin")
 
-            slash("countingstats", "View counting statistics") {
-                option<User>("user", "The user to view stats for")
-            }
+//            slash("countingstats", "View counting statistics") {
+//                option<User>("user", "The user to view stats for")
+//            }
         }.queue()
 
 //        Server.guild.updateCommands().addCommands(
