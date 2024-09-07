@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.requests.ErrorResponse
 import java.time.Instant
 import java.util.*
 
+/** NOT THIS ONE.. SEE [com.learnspigot.bot.database.profile.Profile] */
 data class Profile(
     val id: String,
     val tag: String?,
