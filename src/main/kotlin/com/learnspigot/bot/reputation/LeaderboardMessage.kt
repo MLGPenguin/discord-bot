@@ -1,5 +1,6 @@
 package com.learnspigot.bot.reputation
 
+import com.learnspigot.bot.Bot
 import com.learnspigot.bot.Server
 import com.learnspigot.bot.database.Mongo.userCollection
 import com.learnspigot.bot.database.profile.Profile
@@ -35,10 +36,10 @@ class LeaderboardMessage() {
         Server.leaderboardChannel.apply {
             MessageHistory.getHistoryFromBeginning(this).complete().retrievedHistory.apply {
                 /*
-                 * If all 3 messages aren't there, delete any existing ones and send the new 3
+                 * If all 3 messages aren't there (or they aren't sent by us), delete any existing ones and send the new 3
                  * Otherwise, just get them, edit to update, and store for constant updating like normal
                  */
-                if (size != 3) {
+                if (size != 3 || Bot.jda.selfUser.id != first().author.id) {
                     forEach { it.delete().queue() }
                     monthlyRewardMessage = sendMessageEmbeds(buildPrizeEmbed()).complete()
                     lifetimeMessage = sendMessageEmbeds(buildLeaderboard(false)).complete()
